@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { FaArrowLeft, FaTrashAlt, FaTicketAlt, FaHeart, FaRegHeart } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { fetchWishlist, removeToWishlist } from "../store/wishlistStore";
-import { backendUrlApi } from "../store/authStore";
+import { fetchWishlist, removeToWishlist } from "../../store/wishlistStore";
+import { backendUrlApi } from "../../store/authStore";
 import { Player } from "@lottiefiles/react-lottie-player";
 export default function Wishlist() {
 
@@ -55,7 +55,7 @@ export default function Wishlist() {
                 <FaRegHeart size={200} className="text-gray-300 " />
                 <h2 className="text-3xl font-bold">Your Wishlist is Empty</h2>
                 <p className="text-gray-500">Start adding products you love to your wishlist.</p>
-                <Link to="/Product" className="px-6 py-3 bg-[var(--MainColor)] text-white rounded-lg hover:bg-red-100 hover:text-[var(--MainColor)]">
+                <Link to="/Product" className="px-6 py-3 bg-[var(--bg-Color)] text-white rounded-lg hover:bg-red-100 hover:text-black text-xl">
                     Browse Products
                 </Link>
             </div>

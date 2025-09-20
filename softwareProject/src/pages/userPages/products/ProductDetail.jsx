@@ -1,7 +1,7 @@
 import {  useState } from "react";
-import { backendUrlApi } from "../../store/authStore";
+import { backendUrlApi } from "../../../store/authStore";
 import toast from "react-hot-toast";
-import { addToCart } from "../../store/cartStore";
+import { addToCart } from "../../../store/cartStore";
 
 export default function ProductDetail({ product }) {
     const [quantity, setQuantity] = useState(1);

@@ -1,15 +1,15 @@
 import { FaBars } from "react-icons/fa";
-import AdminLinkItem from "../../pages/admin/AdminLinkItem";
+import AdminLinkItem from "../../pages/adminPages/AdminLinkItem";
 import { Link } from "react-router-dom";
 
 export default function Sidebar() {
     return (
         <div className="drawer drawer-end ">
             <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
-            <div className="drawer-content">
+            <div className="drawer-content bg-[var(--bg-footer)] p-5 ">
                 {/* Page content here */}
-                <label htmlFor="my-drawer-4" className="drawer-button btn ">
-                    <FaBars />
+                <label htmlFor="my-drawer-4" className="drawer-button  bg-[var(--bg-footer)] ">
+                    <FaBars size={30} color="#530400" />
                 </label>
             </div>
             <div className="drawer-side ">

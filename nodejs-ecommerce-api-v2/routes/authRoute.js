@@ -14,8 +14,3 @@ router.post("/resetPassword", resetPassword);
 module.exports = router;
 
 
-// {
-//   "email": "amanymm433@gmail.com",
-//   "newPassword": "1234567",
-//   "passwordConfirm": "1234567"
-// }

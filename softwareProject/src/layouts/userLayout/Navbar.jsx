@@ -1,9 +1,9 @@
 import { FaBars, FaRegHeart, FaShoppingBag,FaTimes, FaUserCircle } from 'react-icons/fa';
-import LinkItem from '../components/ui/LinkItem';
+import LinkItem from '../../components/ui/LinkItem';
  import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import { authStore } from '../store/authStore';
-import AuthLink from '../validation/AuthLink';
+import { authStore } from '../../store/authStore';
+import AuthLink from '../../validation/AuthLink';
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);

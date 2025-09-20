@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaPlus, FaMinus, FaTrashAlt, FaWhatsapp } from "react-icons/fa";
-import { emptyToCart, fetchCart, removeToCart, updateItemToCart } from "../store/cartStore";
-import { authStore, backendUrlApi } from "../store/authStore";
+import { emptyToCart, fetchCart, removeToCart, updateItemToCart } from "../../store/cartStore";
+import { authStore, backendUrlApi } from "../../store/authStore";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { Player } from "@lottiefiles/react-lottie-player";

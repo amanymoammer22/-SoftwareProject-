@@ -1,7 +1,7 @@
 
 export default function About() {
     return (
-        <div className="bg-[var(--bg-Color)] py-12 px-4 md:px-20 flex flex-col md:flex-row items-center md:items-start gap-8">
+        <div className="bg-[var(--bg-Color)] mx-auto py-12 px-4 md:px-20 flex flex-col md:flex-row items-center md:items-start gap-8">
             {/* Left content */}
             <div className="px-4 md:px-16 py-10 flex flex-col gap-10">
                 <h2 className="text-4xl md:text-6xl text-center text-white font-extrabold mb-6">About Us</h2>
@@ -35,8 +35,8 @@ export default function About() {
             </div>
 
             {/* Right image */}
-            <div className="hidden md:flex justify-center items-center mt-40">
-                {/* <img src="AboutImg.jpeg" alt="Palestinian Embroidery" className="w-full max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl rounded-lg shadow-lg object-cover" /> */}
+            <div className="hidden md:flex justify-center items-stretch py-16 mt-8">
+                <img src="bggg.png" alt="PalestinianEmbroidery" className="h-full object-cover" />
             </div>
         </div>
     );

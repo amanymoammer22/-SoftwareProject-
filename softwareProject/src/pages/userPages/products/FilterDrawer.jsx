@@ -2,7 +2,7 @@
 import {  useEffect, useRef, useState } from "react";
 import { FaArrowDown, FaFilter, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { backendUrlApi } from "../../store/authStore";
+import { backendUrlApi } from "../../../store/authStore";
 
 export default function FilterDrawer({
   minPrice,

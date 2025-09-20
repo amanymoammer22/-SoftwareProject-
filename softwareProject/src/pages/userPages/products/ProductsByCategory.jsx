@@ -1,28 +1,28 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { authStore, backendUrlApi } from "../../../store/authStore";
+import toast from "react-hot-toast";
+import { addToCart } from "../../../store/cartStore";
+import { addToWishlist } from "../../../store/wishlistStore";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { Player } from "@lottiefiles/react-lottie-player";
+import { FaCartPlus, FaEye, FaHeart, FaTimes } from "react-icons/fa";
+import ProductDetail from "./ProductDetail";
 import ProductPagination from "./ProductPagination";
 import FilterDrawer from "./FilterDrawer";
-import ProductDetail from "./ProductDetail";
-import {  FaCartPlus, FaEye, FaHeart, FaTimes } from "react-icons/fa";
-import { authStore, backendUrlApi } from "../../store/authStore";
-import { Link } from "react-router-dom";
-import { Player } from "@lottiefiles/react-lottie-player";
-import toast from "react-hot-toast";
-import { addToCart } from "../../store/cartStore";
-import { addToWishlist } from "../../store/wishlistStore";
 
-
-export default function ProductAll() {
+export default function ProductsByCategory() {
+    
+    const { categoryId } = useParams();
+    console.log(categoryId);
     const [products, setProducts] = useState([]);
     const [minPrice, setMin] = useState(0);
     const [maxPrice, setMax] = useState(300);
     const [page, setPage] = useState(1); 
     const [totalPages, setTotalPages] = useState(1);   
      const [selectedProduct, setSelectedProduct] = useState(null);
-    // const [selectedProduct, setSelectedProduct] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    //const displayedProductIds = [];
      const handleAddToCart = async (p) => {
          try {
              const user = authStore.getState().user; 
@@ -55,7 +55,7 @@ export default function ProductAll() {
       };
        
     
-   const fetchProducts = async (currentPage = 1, minPrice, maxPrice) => {
+   const fetchProducts = async (currentPage = 1, minPrice, maxPrice, categoryId) => {
        try {
            setLoading(true);
            const params = new URLSearchParams();
@@ -64,6 +64,7 @@ export default function ProductAll() {
 
            if (minPrice !== undefined) params.append("price[gte]", minPrice);
            if (maxPrice !== undefined) params.append("price[lte]", maxPrice);
+            if (categoryId) params.append("category", categoryId);
 
            const res = await axios.get(`${backendUrlApi}api/v1/products?${params.toString()}`);
            console.log(res.data);
@@ -79,12 +80,12 @@ export default function ProductAll() {
 
     
     useEffect(() => {
-        fetchProducts(page, minPrice, maxPrice);
-    }, [page]);
+        fetchProducts(page, minPrice, maxPrice, categoryId);
+    }, [page, categoryId]);
 
 
        return (
-           <div className="text-neutral-900 font-[Abhaya Libre,serif] bg-[var(--bg-footer)]">
+           <div className="text-neutral-900 font-[Abhaya Libre,serif] bg-[var(--bg-footer)] mt-24">
                <div className="grid grid-cols-[1fr_290px] gap-4 max-lg:grid-cols-1">
                    {/* Products */}
                    <main className="bg-[var(--bg-footer)] order-1 max-lg:order-2">
@@ -167,4 +168,4 @@ export default function ProductAll() {
            </div>
        );
     }
-  
+

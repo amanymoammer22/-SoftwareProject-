@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const slugify = require("slugify");
 const productSchema = new mongoose.Schema(
     {
         title: {
@@ -11,7 +11,6 @@ const productSchema = new mongoose.Schema(
         },
         slug: {
             type: String,
-            required: true,
             lowercase: true,
         },
         description: {
