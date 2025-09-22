@@ -1,44 +1,75 @@
+    import { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { backendUrlApi } from "../../store/authStore";
 
 export default function ContactSection() {
+
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(`${backendUrlApi}api/v1/contact`, formData);
+      toast.success("Message sent successfully!");
+      setFormData({ name: "", email: "", message: "" });
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to send message.");
+    }
+  };
+
     return (
-        <section class="bg-[var(--bg-Color)] text-white mt-16">
-            <div class="max-w-5xl mx-auto px-4 py-10">
-                <div class="grid md:grid-cols-2 gap-8 items-start">
+        <section className="bg-[var(--bg-Color)] text-white mt-16">
+            <div className="max-w-5xl mx-auto px-4 py-10">
+                <div className="grid md:grid-cols-2 gap-8 items-start">
                     <div>
-                        <h2 class="text-3xl font-bold mb-3">Contact</h2>
-                        <p class="text-white/85 leading-relaxed mb-6">
+                        <h3 className="text-3xl font-bold mb-3">Contact</h3>
+                        <p className="text-white/85 leading-relaxed mb-6">
                             We would love to hear from you! please fill out the form below or get in touch with us directly using the contact information provided
                         </p>
 
-                        <form class="space-y-4">
+                        {/* form */}
+                        <form onSubmit={handleSubmit} className="space-y-4">
                             <input
-                                type="text"
+                                name="name"
                                 placeholder="Name"
-                                class="w-full rounded-xl bg-white/20 placeholder-white/80 text-white px-4 py-3 ring-1 ring-white/25 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                                value={formData.name}
+                                onChange={handleChange}
+                                className="w-full rounded-xl bg-white/20 placeholder-white/80 text-white px-4 py-3 ring-1 ring-white/25 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                                required
                             />
-
                             <input
-                                type="email"
+                                name="email"
                                 placeholder="Email"
-                                class="w-full rounded-xl bg-white/20 placeholder-white/80 text-white px-4 py-3 ring-1 ring-white/25 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className="w-full rounded-xl bg-white/20 placeholder-white/80 text-white px-4 py-3 ring-1 ring-white/25 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                                required
                             />
-
                             <textarea
-                                rows="4"
+                                name="message"
                                 placeholder="Message"
-                                class="w-full rounded-xl bg-white/20 placeholder-white/80 text-white px-4 py-3 ring-1 ring-white/25 focus:outline-none focus:ring-2 focus:ring-amber-300 resize-none"></textarea>
+                                value={formData.message}
+                                onChange={handleChange}
+                                rows="4"
+                                className="w-full rounded-xl bg-white/20 placeholder-white/80 text-white px-4 py-3 ring-1 ring-white/25 focus:outline-none focus:ring-2 focus:ring-amber-300 resize-none"></textarea>
 
                             <button
                                 type="submit"
-                                class="inline-flex items-center px-5 py-2 rounded-lg bg-amber-400 text-black font-semibold italic shadow hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300">
+                                className="inline-flex items-center px-5 py-2 rounded-lg bg-amber-400 text-black font-semibold italic shadow hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300">
                                 Send Message
                             </button>
                         </form>
                     </div>
 
-                    <div class="flex md:justify-end">
-                        <div class="w-64 sm:w-72 md:w-80 rounded-2xl overflow-hidden bg-white/10 border border-white/15 shadow-lg">
-                            <img src="contactimg.jpg" alt="Decorative pillows" class="w-full h-full object-cover" />
+                    <div className="flex md:justify-end">
+                        <div className="w-64 sm:w-72 md:w-80 rounded-2xl overflow-hidden bg-white/10 border border-white/15 shadow-lg hidden md:flex">
+                            <img src="contactimg.jpg" alt="Decorative pillows" className="w-full h-full object-cover" />
                         </div>
                     </div>
                 </div>

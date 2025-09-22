@@ -7,7 +7,6 @@ import ProductItem from "./ProductItem";
 import AddProduct from "./AddProduct";
 export default function Products() {
 
-
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
@@ -23,8 +22,8 @@ export default function Products() {
             params.append("page", currentPage);
             params.append("limit", 8);
             const res = await axios.get(`${backendUrlApi}api/v1/products?${params.toString()}`);
-          setProducts(res.data.data); 
-          console.log(res.data.data);
+           setProducts(res.data.data); 
+        //    console.log(res.data.data);
           setPages(res.data.paginationResult?.numberOfPages || 1);
           setPage(currentPage);
         } catch (err) {
@@ -45,7 +44,6 @@ export default function Products() {
       try {
           await axios.delete(`${backendUrlApi}api/v1/products/${id}`);
           setProducts((prev) => prev.filter((p) => p._id !== id));
-
           toast.success("✅ Product deleted successfully!");
       } catch (error) {
           console.error(error);
@@ -65,10 +63,10 @@ export default function Products() {
           {/* Header + Add */}
           <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-700">Manage Products</h2>
-             
-                  <button onClick={() => setShowAddModal(true)} className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-lg shadow-sm">
-                      + Add Product
-                  </button>
+
+              <button onClick={() => setShowAddModal(true)} className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-lg shadow-sm">
+                  + Add Product
+              </button>
           </div>
 
           {/* Card */}
@@ -100,7 +98,15 @@ export default function Products() {
                               <div className="col-span-1"> {(page - 1) * 8 + (index + 1)}</div>
 
                               <div className="col-span-2 flex items-center gap-3">
-                                  <img src={`${backendUrlApi}${p.imageCover}`} alt="product" className="w-12 h-12 rounded-lg object-cover border" />
+                                  <img
+                                      src={
+                                          p.imageCover.startsWith("./")
+                                              ? `${backendUrlApi}${p.imageCover}`
+                                              : `${backendUrlApi}/product/${p.imageCover}`
+                                      }
+                                      alt="product"
+                                      className="w-14 h-14 rounded-lg object-cover border"
+                                  />
                                   <div className="truncate text-gray-700">{p.title || "—"}</div>
                               </div>
 

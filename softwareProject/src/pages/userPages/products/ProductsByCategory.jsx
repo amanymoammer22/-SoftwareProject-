@@ -12,20 +12,69 @@ import ProductPagination from "./ProductPagination";
 import FilterDrawer from "./FilterDrawer";
 
 export default function ProductsByCategory() {
-    
-    const { categoryId } = useParams();
-    console.log(categoryId);
-    const [products, setProducts] = useState([]);
-    const [minPrice, setMin] = useState(0);
-    const [maxPrice, setMax] = useState(300);
-    const [page, setPage] = useState(1); 
-    const [totalPages, setTotalPages] = useState(1);   
+     const { categoryId } = useParams();
+     const [products, setProducts] = useState([]);
+     const [minPrice, setMin] = useState(0);
+     const [maxPrice, setMax] = useState(300);
+     const [page, setPage] = useState(1);
+     const [totalPages, setTotalPages] = useState(1);
      const [selectedProduct, setSelectedProduct] = useState(null);
-    const [loading, setLoading] = useState(true);
+     const [loading, setLoading] = useState(true);
+     const [category, setCategory] = useState(null);
 
+     const fetchProducts = async (currentPage = 1, min = minPrice, max = maxPrice) => {
+         try {
+             setLoading(true);
+             const params = new URLSearchParams();
+             params.append("page", currentPage);
+             params.append("limit", 8);
+             if (min !== undefined) params.append("price[gte]", min);
+             if (max !== undefined) params.append("price[lte]", max);
+             if (categoryId) params.append("category", categoryId); // <-- مهم!
+
+             const url = `${backendUrlApi}api/v1/products?${params.toString()}`;
+             // console.log("🔗 Final URL:", url);
+             const res = await axios.get(url);
+
+             setProducts(res.data.data || []);
+             setTotalPages(res.data.paginationResult?.numberOfPages || 1);
+         } catch (err) {
+             console.error("Error fetching products:", err);
+         } finally {
+             setLoading(false);
+         }
+     };
+
+     const fetchCategory = async () => {
+         if (!categoryId) return;
+         try {
+             const res = await axios.get(`${backendUrlApi}api/v1/categories/${categoryId}`);
+             setCategory(res.data.data);
+         } catch (err) {
+             console.error("Error fetching category:", err);
+         }
+    };
+    
+     useEffect(() => {
+         fetchProducts(page);
+         fetchCategory();
+     }, [page, categoryId]);
+
+     // دوال تمرير للـDrawer تضمن إضافة categoryId دائمًا
+     const handleApplyFilter = () => {
+         setPage(1); // ارجع لأول صفحة مع الفلاتر
+         fetchProducts(1); // يستخدم min/max الحاليين + categoryId
+     };
+
+     const handleClearFilters = () => {
+         setMin(0);
+         setMax(300);
+         setPage(1);
+         fetchProducts(1, 0, 300); // مع categoryId مثبت
+     };
      const handleAddToCart = async (p) => {
          try {
-             const user = authStore.getState().user; 
+             const user = authStore.getState().user;
              if (!user) {
                  toast.error("Please log in to continue.");
                  return;
@@ -37,10 +86,9 @@ export default function ProductsByCategory() {
              console.error(err);
          }
     };
-    
 
     const handleAddToWishlist = async (p) => {
-            const user = authStore.getState().user; 
+            const user = authStore.getState().user;
             if (!user) {
                 toast.error("Please log in to continue.");
                 return;
@@ -52,40 +100,23 @@ export default function ProductsByCategory() {
           } catch (err) {
               console.error(err);
           }
-      };
-       
+    };
     
-   const fetchProducts = async (currentPage = 1, minPrice, maxPrice, categoryId) => {
-       try {
-           setLoading(true);
-           const params = new URLSearchParams();
-           params.append("page", currentPage);
-           params.append("limit", 8);
-
-           if (minPrice !== undefined) params.append("price[gte]", minPrice);
-           if (maxPrice !== undefined) params.append("price[lte]", maxPrice);
-            if (categoryId) params.append("category", categoryId);
-
-           const res = await axios.get(`${backendUrlApi}api/v1/products?${params.toString()}`);
-           console.log(res.data);
-
-           setProducts(res.data.data);
-           setTotalPages(res.data.paginationResult?.numberOfPages || 1);
-       } catch (err) {
-           console.error("Error fetching products:", err);
-       } finally {
-           setLoading(false);
-       }
-   };
-
-    
-    useEffect(() => {
-        fetchProducts(page, minPrice, maxPrice, categoryId);
-    }, [page, categoryId]);
-
 
        return (
-           <div className="text-neutral-900 font-[Abhaya Libre,serif] bg-[var(--bg-footer)] mt-24">
+           <div className="text-neutral-900 font-[Abhaya Libre,serif] bg-[var(--bg-footer)] mt-20">
+               {category && (
+                   <div
+                       className=" flex items-center justify-center px-4 sm:px-6 lg:px-14  w-full h-auto lg:h-64 bg-cover bg-center   "
+                       style={{
+                           backgroundImage: "url('/bannimg.jpeg')",
+                       }}>
+                       <div className="inset-0 flex items-center justify-center">
+                           <h1 className="text-[var(--bgtext-coler)] md:text-4xl text-2xl font-bold">{category.name}</h1>
+                       </div>
+                   </div>
+               )}
+
                <div className="grid grid-cols-[1fr_290px] gap-4 max-lg:grid-cols-1">
                    {/* Products */}
                    <main className="bg-[var(--bg-footer)] order-1 max-lg:order-2">
@@ -100,7 +131,11 @@ export default function ProductsByCategory() {
                                            <div className="relative w-full aspect-square overflow-hidden rounded-xl">
                                                {/* Image */}
                                                <img
-                                                   src={`${backendUrlApi}${p.imageCover}`}
+                                                   src={
+                                                       p.imageCover.startsWith("./")
+                                                           ? `${backendUrlApi}${p.imageCover}`
+                                                           : `${backendUrlApi}/product/${p.imageCover}`
+                                                   }
                                                    alt={p.title}
                                                    className="w-full h-full object-cover select-none"
                                                    draggable="false"
@@ -135,10 +170,9 @@ export default function ProductsByCategory() {
                                                {/* Title + Wishlist */}
                                                <div className="flex items-center justify-between">
                                                    <h4 className="text-base font-semibold truncate">{p.title}</h4>
-                                                       <button onClick={() => handleAddToWishlist(p)} className="hover:scale-110 transition-transform" aria-label="Add to wishlist">
-                                                           <FaHeart size={20} className="text-red-500" />
-                                                       </button>
-                                                  
+                                                   <button onClick={() => handleAddToWishlist(p)} className="hover:scale-110 transition-transform" aria-label="Add to wishlist">
+                                                       <FaHeart size={20} className="text-red-500" />
+                                                   </button>
                                                </div>
 
                                                {/* Price + Add to Cart */}
@@ -162,10 +196,16 @@ export default function ProductsByCategory() {
 
                    {/* Filter Card on the right */}
                    <aside className="flex gap-6 order-2 max-lg:order-1 py-5">
-                       <FilterDrawer minPrice={minPrice} maxPrice={maxPrice} setMin={setMin} setMax={setMax} fetchProducts={fetchProducts}  />
+                       <FilterDrawer
+                           minPrice={minPrice}
+                           maxPrice={maxPrice}
+                           setMin={setMin}
+                           setMax={setMax}
+                           onApply={handleApplyFilter} 
+                           onClear={handleClearFilters} 
+                       />
                    </aside>
                </div>
            </div>
        );
     }
-

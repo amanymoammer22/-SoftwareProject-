@@ -5,21 +5,7 @@ import { Link } from "react-router-dom";
 // import { backendUrlApi } from "../../store/authStore";
 
 export default function ProductPageHeader() {
-    // const [categories, setCategories] = useState([]);
-
-    // useEffect(() => {
-    //     const fetchCategories = async () => {
-    //         try {
-    //             const res = await axios.get(`${backendUrlApi}api/v1/categories`);
-    //             setCategories(res.data.data);
-    //         } catch (error) {
-    //             console.error("Error fetching categories:", error);
-    //         }
-    //     };
-
-    //     fetchCategories();
-    // }, []);
-
+  
     return (
         <div
             className=" flex flex-col lg:flex-row justify-between items-center 

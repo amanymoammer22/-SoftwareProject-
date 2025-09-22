@@ -4,22 +4,64 @@ class ApiFeatures {
         this.queryString = queryString;
     }
 
+    // filter() {
+    //     const queryStringObj = { ...this.queryString };
+    //     const excludesFields = ["page", "sort", "limit", "fields"];
+    //     excludesFields.forEach((field) => delete queryStringObj[field]);
+
+    //     // 🟢 حلنا: نحول price[gte] => { price: { gte: 100 } }
+    //     let mongoQuery = {};
+    //     for (let key in queryStringObj) {
+    //         if (key.includes("[")) {
+    //             // مثال key = "price[gte]"
+    //             const [field, operator] = key.split("[");
+    //             const cleanOperator = operator.replace("]", "");
+    //             if (!mongoQuery[field]) mongoQuery[field] = {};
+    //             mongoQuery[field][`$${cleanOperator}`] = queryStringObj[key];
+    //         } else {
+    //             // mongoQuery[key] = queryStringObj[key];
+    //              if (key === "category") {
+    //                  const mongoose = require("mongoose");
+    //                  mongoQuery[key] = new mongoose.Types.ObjectId(queryStringObj[key]);
+    //              } else {
+    //                  mongoQuery[key] = queryStringObj[key];
+    //              }
+    //         }
+    //     }
+
+    //     // console.log("✅ Final Filter:", mongoQuery);
+    //     this.mongooseQuery = this.mongooseQuery.find(mongoQuery);
+    //     return this;
+    // }
+
     filter() {
         const queryStringObj = { ...this.queryString };
         const excludesFields = ["page", "sort", "limit", "fields"];
         excludesFields.forEach((field) => delete queryStringObj[field]);
 
-        // 🟢 حلنا: نحول price[gte] => { price: { gte: 100 } }
         let mongoQuery = {};
+        const mongoose = require("mongoose");
+
         for (let key in queryStringObj) {
             if (key.includes("[")) {
-                // مثال key = "price[gte]"
+                // مثال: price[gte] => { price: { $gte: value } }
                 const [field, operator] = key.split("[");
                 const cleanOperator = operator.replace("]", "");
                 if (!mongoQuery[field]) mongoQuery[field] = {};
                 mongoQuery[field][`$${cleanOperator}`] = queryStringObj[key];
             } else {
-                mongoQuery[key] = queryStringObj[key];
+                let value = queryStringObj[key];
+
+                // 🟢 تحسين: أي مفتاح بينتهي بـ "id" أو اسمه "category" نحوله لـ ObjectId
+                if (key.toLowerCase().endsWith("id") || key === "category") {
+                    try {
+                        value = new mongoose.Types.ObjectId(value);
+                    } catch (err) {
+                        console.warn(`⚠️ ${key} value is not a valid ObjectId:`, value);
+                    }
+                }
+
+                mongoQuery[key] = value;
             }
         }
 
@@ -33,7 +75,7 @@ class ApiFeatures {
             const sortBy = this.queryString.sort.split(",").join(" ");
             this.mongooseQuery = this.mongooseQuery.sort(sortBy);
         } else {
-            this.mongooseQuery = this.mongooseQuery.sort("-createdAt -_id")
+            this.mongooseQuery = this.mongooseQuery.sort("-createdAt -_id");
         }
         return this;
     }
@@ -72,7 +114,7 @@ class ApiFeatures {
         const pagination = {};
         pagination.currentPage = page;
         pagination.limit = limit;
-       pagination.numberOfPages = Math.max(1, Math.ceil(countDocuments / limit));
+        pagination.numberOfPages = Math.max(1, Math.ceil(countDocuments / limit));
 
         // next page
         if (endIndex < countDocuments) {

@@ -78,7 +78,29 @@ export default function Cart() {
      } catch (err) {
          toast.error(err.response?.data?.message || "❌ Error removing item");
      }
- };
+    };
+    
+
+    function handleWhatsappOrder() {
+        if (!cart || !cart.cartItems) return;
+
+        const phoneNumber = "201040962751"; // ضع رقمك هنا مع كود الدولة
+
+        // جهز نص الرسالة
+        let message = "Hello! I want to place this order:\n\n";
+        cart.cartItems.forEach((item) => {
+            message += `- ${item.title} x${item.quantity} = $${item.quantity * item.price}\n`;
+        });
+        message += `\nTotal: $${cart.totalCartPrice}\n`;
+        message += "Please deliver to my address.";
+
+        // إنشاء الرابط
+        const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+        // فتح الرابط
+        window.open(url, "_blank");
+    }
+
     if (!cart || cartItems.length === 0)
         return (
             <div className="flex items-center justify-center h-fit gap-8 p-16 bg-[var(--bg-Color)] text-white  mt-16">
@@ -173,6 +195,7 @@ export default function Cart() {
                          </div>
 
                          <a
+                             onClick={handleWhatsappOrder}
                              target="_blank"
                              rel="noreferrer"
                              className="mt-3 inline-flex items-center justify-center gap-2 w-full rounded-lg bg-[#f40e0e] hover:bg-[#d33531] text-white font-semibold py-2 cursor-pointer">

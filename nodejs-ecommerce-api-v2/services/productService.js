@@ -1,25 +1,77 @@
 const factory = require("./handlersFactory");
 const Product = require("../models/productModel");
+const asyncHandler = require("express-async-handler");
+const { v4: uuidv4 } = require("uuid");
+const sharp = require("sharp");
+const { uploadMixOfImages } = require("../middlewares/uploadImageMiddleware");
 
 
-// exports.uploadProductImages = uploadMixOfImages([
-//     {
-//         name: "imageCover",
-//         maxCount: 1,
-//     },
-//     {
-//         name: "images",
-//         maxCount: 5,
-//     },
-// ]);
+exports.uploadProductImages = uploadMixOfImages([
+    {
+        name: "imageCover",
+        maxCount: 1,
+    },
+    {
+        name: "images",
+        maxCount: 5,
+    },
+]);
+
+const fs = require("fs");
+const path = require("path");
+
+exports.resizeProductImages = asyncHandler(async (req, res, next) => {
+    const uploadDir = path.join(__dirname, "../uploads/product");
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    console.log("req.body =>", req.body);
+    console.log("req.files =>", req.files);
+
+    // 1- Image processing for imageCover
+    if (req.files.imageCover) {
+        const imageCoverFileName = `product-${uuidv4()}-${Date.now()}-cover.jpeg`;
+
+        await sharp(req.files.imageCover[0].buffer).resize(2000, 1333).toFormat("jpeg").jpeg({ quality: 95 }).toFile(path.join(uploadDir, imageCoverFileName));
+
+        req.body.imageCover = imageCoverFileName;
+    }
+
+    // 2- Image processing for other images
+    if (req.files.images) {
+        req.body.images = [];
+        await Promise.all(
+            req.files.images.map(async (img, index) => {
+                const imageName = `product-${uuidv4()}-${Date.now()}-${index + 1}.jpeg`;
+
+                await sharp(img.buffer).resize(2000, 1333).toFormat("jpeg").jpeg({ quality: 95 }).toFile(path.join(uploadDir, imageName));
+
+                req.body.images.push(imageName);
+            }),
+        );
+    }
+
+    next(); // مهم أن يوضع هنا حتى لو ما في images
+});
+
 
 // exports.resizeProductImages = asyncHandler(async (req, res, next) => {
+//     const fs = require("fs");
+//     const path = require("path");
+
+//     const uploadDir = path.join(__dirname, "../uploads/product");
+//     if (!fs.existsSync(uploadDir)) {
+//         fs.mkdirSync(uploadDir, { recursive: true });
+//     }
+//     console.log("req.body =>", req.body);
+//     console.log("req.files =>", req.files); 
 //     // console.log(req.files);
 //     //1- Image processing for imageCover
 //     if (req.files.imageCover) {
 //         const imageCoverFileName = `product-${uuidv4()}-${Date.now()}-cover.jpeg`;
 
-//         await sharp(req.files.imageCover[0].buffer).resize(2000, 1333).toFormat("jpeg").jpeg({ quality: 95 }).toFile(`uploads/products/${imageCoverFileName}`);
+//         await sharp(req.files.imageCover[0].buffer).resize(2000, 1333).toFormat("jpeg").jpeg({ quality: 95 }).toFile(`uploads/product/${imageCoverFileName}`);
 
 //         // Save image into our db
 //         req.body.imageCover = imageCoverFileName;
@@ -31,7 +83,7 @@ const Product = require("../models/productModel");
 //             req.files.images.map(async (img, index) => {
 //                 const imageName = `product-${uuidv4()}-${Date.now()}-${index + 1}.jpeg`;
 
-//                 await sharp(img.buffer).resize(2000, 1333).toFormat("jpeg").jpeg({ quality: 95 }).toFile(`uploads/products/${imageName}`);
+//                 await sharp(img.buffer).resize(2000, 1333).toFormat("jpeg").jpeg({ quality: 95 }).toFile(`uploads/product/${imageName}`);
 
 //                 // Save image into our db
 //                 req.body.images.push(imageName);

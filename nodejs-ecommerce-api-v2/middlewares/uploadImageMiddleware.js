@@ -1,37 +1,13 @@
-// const multer = require("multer");
-// const ApiError = require("../utils/apiError");
-
-// const multerOptions = () => {
-//     const multerStorage = multer.memoryStorage();
-
-//     const multerFilter = function (req, file, cb) {
-//         if (file.mimetype.startsWith("image")) {
-//             cb(null, true);
-//         } else {
-//             cb(new ApiError("Only Images allowed", 400), false);
-//         }
-//     };
-
-//     const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
-
-//     return upload;
-// };
-
-// exports.uploadSingleImage = (fieldName) => multerOptions().single(fieldName);
-
-// exports.uploadMixOfImages = (arrayOfFields) => multerOptions().fields(arrayOfFields);
-
-/////////////////////////////////////////////////////////
 const multer = require("multer");
 const ApiError = require("../utils/apiError");
 const path = require("path");
 
-const multerStorage = multer.diskStorage({
+const multerStorage = multer.memoryStorage({
     destination: function (req, file, cb) {
-        cb(null, "uploads/Product"); //    
+        cb(null, "uploads/Product"); //
     },
     filename: function (req, file, cb) {
-        const ext = path.extname(file.originalname); // 
+        const ext = path.extname(file.originalname); //
         const filename = `product-${Date.now()}${ext}`; //
         cb(null, filename);
     },

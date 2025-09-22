@@ -5,21 +5,34 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { authStore, backendUrlApi } from "../../store/authStore";
 import toast from "react-hot-toast";
+import { flushSync } from "react-dom";
 
 export default function Login() {
     const navigate = useNavigate();
-     const login = authStore((state) => state.login);
+    const login = authStore((state) => state.login);
+    
+    // const login = authStore((state) => state.login);
+    // login(user, token, values.remember);
 
      const handleSubmit = async (values, { setSubmitting }) => {
         const data = { email: values.email, password: values.password };
          try {
              const res = await axios.post(`${backendUrlApi}api/v1/auth/login`, data);
              const { token, data: user } = res.data;
-
-             login(user, token, values.remember);
-
-             toast.success("Logged In Successfully..!", { duration: 1200, position: "top-center" });
-             navigate("/");
+              flushSync(() => {
+                  login(user, token, values.remember);
+              });
+           
+         
+             if (user.role === "admin") {
+                 console.log("adminlogin");
+                 navigate("/admin");
+             } else {
+                 navigate("/");
+                 
+             }
+              console.log("Current User:", user.role);
+              toast.success("Logged In Successfully..!", { duration: 1200, position: "top-center" });
          } catch (err) {
              console.log(err +"err pass");
              toast.error(err.response?.data?.message || "Login failed", {

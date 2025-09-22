@@ -1,8 +1,19 @@
 import { FaBars } from "react-icons/fa";
 import AdminLinkItem from "../../pages/adminPages/AdminLinkItem";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { authStore } from "../../store/authStore";
 
 export default function Sidebar() {
+
+    const logout = authStore((state) => state.logout);
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate("/login");  
+    };
+
+
     return (
         <div className="drawer drawer-end ">
             <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -40,7 +51,9 @@ export default function Sidebar() {
                     </li>{" "}
                     <hr className="w-full my-4 border text-[#72312e] font-bold" />
                     <li className="w-full p-2 rounded-2xl mt-5 text-center hover:bg-[var(--bg-hover)]">
-                        <Link className=" text-white text-xl font-bold "> logout</Link>
+                        <button onClick={handleLogout} className=" text-white text-xl font-bold ">
+                            logout
+                        </button>
                     </li>
                 </ul>
             </div>

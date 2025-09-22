@@ -27,6 +27,9 @@ exports.updateOne = (Model) =>
 
 exports.createOne = (Model) =>
     asyncHandler(async (req, res) => {
+         console.log("📩 DATA RECEIVED FROM FRONTEND:");
+         console.log("BODY:", req.body);
+         console.log("FILES:", req.files);
         const newDoc = await Model.create(req.body);
         res.status(201).json({ data: newDoc });
     });
@@ -43,6 +46,7 @@ exports.getOne = (Model) =>
 
 exports.getAll = (Model, modelName = "") =>
     asyncHandler(async (req, res) => {
+          console.log("🟢 Raw req.query at entry:", req.query); 
         let filter = {};
         if (req.filterObj) {
             filter = req.filterObj;
@@ -56,7 +60,7 @@ exports.getAll = (Model, modelName = "") =>
         // Execute query
         const { mongooseQuery, paginationResult } = apiFeatures;
         const documents = await mongooseQuery;
-        console.log("🔎 req.query:", req.query);
+        
 
         res.status(200).json({ results: documents.length, paginationResult, data: documents });
     });

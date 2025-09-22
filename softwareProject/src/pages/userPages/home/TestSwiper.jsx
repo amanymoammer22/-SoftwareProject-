@@ -4,6 +4,7 @@ import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import Button from "../../../components/ui/Button";
+import { Link } from "react-router-dom";
 
 export default function TestSwiper() {
     return (
@@ -28,7 +29,7 @@ export default function TestSwiper() {
                         <div className="w-full h-48 sm:h-60 lg:h-72 overflow-hidden">
                             <img src="img2.jpg " alt="Product" className="w-full h-full object-cover select-none" draggable="false" onDragStart={(e) => e.preventDefault()} />
                         </div>
-                        <p className="mt-2 font-medium text-sm sm:text-base">$30.00</p>
+                        <p className="mt-2 font-semibold text-sm sm:text-base">$30.00</p>
                     </div>
                 </SwiperSlide>
                 <SwiperSlide>
@@ -65,7 +66,7 @@ export default function TestSwiper() {
                 </SwiperSlide>
             </Swiper>
             <div className="flex justify-center mt-8">
-                <Button value=" View All" />
+                <Link to="./product " ><Button value="View All" /></Link>
             </div>
         </div>
     );
