@@ -127,7 +127,11 @@ export default function Cart() {
                          <div key={i._id} className="bg-[#65120c]/70 rounded-xl border border-white/10 overflow-hidden">
                              <div className="flex items-stretch gap-3 p-3">
                                  <div className="w-24 h-24 rounded-lg overflow-hidden bg-black/10 shrink-0">
-                                     <img src={`${backendUrlApi}${i.imageCover}`} alt={i.title} className="w-full h-full object-cover" />
+                                     <img
+                                         src={i.imageCover.startsWith("./") ? `${backendUrlApi}${i.imageCover}` : `${backendUrlApi}/product/${i.imageCover}`}
+                                         alt={i.title}
+                                         className="w-full h-full object-cover"
+                                     />
                                  </div>
 
                                  <div className="flex-1 flex justify-between">

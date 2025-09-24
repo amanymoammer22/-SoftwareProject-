@@ -19,7 +19,9 @@ const productRoute = require("./routes/productRoute");
 const cartRouter = require("./routes/cartRoute");
 const wishlistRoute = require("./routes/wishlistRoute");
 const adminRoute = require("./routes/adminRoute");
-const contactRoutes = require("./routes/contactRoute");
+// const contactRoutes = require("./routes/contactRoute");
+const subscriberRoute = require("./routes/subscriberRoute");
+
 
 // 1) Connect DB
 dbConnection();
@@ -61,8 +63,8 @@ app.use("/api/v1/products", productRoute);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/wishlist", wishlistRoute);
 app.use("/api/v1/admin", adminRoute);
-app.use("/api/v1/contact", contactRoutes);
-
+// app.use("/api/v1/contact", contactRoutes);
+app.use("/api/v1/subscribe", subscriberRoute);
 
 // 6) 404 handler
 app.use((req, res, next) => {

@@ -62,8 +62,8 @@ export default function ProductsByCategory() {
 
      // دوال تمرير للـDrawer تضمن إضافة categoryId دائمًا
      const handleApplyFilter = () => {
-         setPage(1); // ارجع لأول صفحة مع الفلاتر
-         fetchProducts(1); // يستخدم min/max الحاليين + categoryId
+         setPage(1); 
+         fetchProducts(1);
      };
 
      const handleClearFilters = () => {

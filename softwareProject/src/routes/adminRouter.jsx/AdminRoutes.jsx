@@ -11,7 +11,7 @@ import AdminRoute from './AdminRoute';
 export default function AdminRoutes() {
     return (
         <Routes>
-            {/* حماية كل الأدمن routes */}
+           
             <Route element={<AdminRoute />}>
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<Dashboard />} />
@@ -20,7 +20,6 @@ export default function AdminRoutes() {
                     <Route path="additem" element={<AddItem />} />
                 </Route>
             </Route>
-
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

@@ -30,7 +30,11 @@ export default function ProductDetail({ product }) {
             {/* Image */}
             <div className="flex flex-col items-center">
                 <div className="overflow-hidden rounded-2xl shadow-md">
-                    <img src={`${backendUrlApi}${product.imageCover}`} alt="Product" className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
+                    <img
+                        src={product.imageCover.startsWith("./") ? `${backendUrlApi}${product.imageCover}` : `${backendUrlApi}/product/${product.imageCover}`}
+                        alt="Product"
+                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                    />
                 </div>
 
                 {/* Info under image */}
@@ -76,7 +80,7 @@ export default function ProductDetail({ product }) {
                     <span className=" font-semibold w-full rounded-lg bg-[#f2f2eb]  p-2 shadow-sm  ">${product.price}</span>
                 </div>
                 {/* Description */}
-                <p className="w-full rounded-lg bg-[#f2f2eb] p-4 shadow-sm ">{product.description}</p>
+                <p className="w-full rounded-lg bg-[#f2f2eb] p-2 shadow-sm break-words whitespace-pre-wrap">{product.description}</p>
 
                 {/* <div>
                     <h4 className="font-semibold mb-2">Size</h4>
@@ -95,9 +99,7 @@ export default function ProductDetail({ product }) {
                     </div>
                 </div>
                 {/* Add to Cart */}
-                <button
-                    onClick={handleAddToCart}
-                    className="text-center  text-sm sm:text-base font-semibold bg-[var(--bg-btn)] text-white rounded-full px-4 py-2 hover:opacity-90 transition">
+                <button onClick={handleAddToCart} className="text-center  text-sm sm:text-base font-semibold bg-[var(--bg-btn)] text-white rounded-full px-4 py-2 hover:opacity-90 transition">
                     Add to Cart
                 </button>
             </div>

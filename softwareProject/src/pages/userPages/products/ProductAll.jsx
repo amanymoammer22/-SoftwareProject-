@@ -22,7 +22,6 @@ export default function ProductAll() {
     // const [selectedProduct, setSelectedProduct] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    //const displayedProductIds = [];
      const handleAddToCart = async (p) => {
          try {
              const user = authStore.getState().user; 
@@ -38,7 +37,6 @@ export default function ProductAll() {
          }
     };
     
-
     const handleAddToWishlist = async (p) => {
             const user = authStore.getState().user; 
             if (!user) {
@@ -54,16 +52,27 @@ export default function ProductAll() {
           }
       };
        
+        const handleApplyFilter = () => {
+               setPage(1);
+               fetchProducts(1, minPrice, maxPrice);
+        };
+
+        const handleClearFilters = () => {
+           setMin(0);
+           setMax(300);
+           setPage(1);
+           fetchProducts(1, 0, 300); 
+    };
     
-   const fetchProducts = async (currentPage = 1, minPrice, maxPrice) => {
+   const fetchProducts = async (currentPage = 1, min = minPrice, max = maxPrice) => {
        try {
            setLoading(true);
            const params = new URLSearchParams();
            params.append("page", currentPage);
            params.append("limit", 8);
 
-           if (minPrice !== undefined) params.append("price[gte]", minPrice);
-           if (maxPrice !== undefined) params.append("price[lte]", maxPrice);
+           if (minPrice !== undefined) params.append("price[gte]", min);
+           if (maxPrice !== undefined) params.append("price[lte]", max);
 
            const res = await axios.get(`${backendUrlApi}api/v1/products?${params.toString()}`);
            console.log(res.data);
@@ -99,10 +108,7 @@ export default function ProductAll() {
                                            <div className="relative w-full aspect-square overflow-hidden rounded-xl">
                                                {/* Image */}
                                                <img
-                                                   src={p.imageCover.startsWith("./")
-                                                       ? `${backendUrlApi}${p.imageCover}`
-                                                       : `${backendUrlApi}/product/${p.imageCover}`
-                                                   }
+                                                   src={p.imageCover.startsWith("./") ? `${backendUrlApi}${p.imageCover}` : `${backendUrlApi}/product/${p.imageCover}`}
                                                    alt={p.title}
                                                    className="w-full h-full object-cover select-none"
                                                    draggable="false"
@@ -137,10 +143,9 @@ export default function ProductAll() {
                                                {/* Title + Wishlist */}
                                                <div className="flex items-center justify-between">
                                                    <h4 className="text-base font-semibold truncate">{p.title}</h4>
-                                                       <button onClick={() => handleAddToWishlist(p)} className="hover:scale-110 transition-transform" aria-label="Add to wishlist">
-                                                           <FaHeart size={20} className="text-red-500" />
-                                                       </button>
-                                                  
+                                                   <button onClick={() => handleAddToWishlist(p)} className="hover:scale-110 transition-transform" aria-label="Add to wishlist">
+                                                       <FaHeart size={20} className="text-red-500" />
+                                                   </button>
                                                </div>
 
                                                {/* Price + Add to Cart */}
@@ -164,7 +169,15 @@ export default function ProductAll() {
 
                    {/* Filter Card on the right */}
                    <aside className="flex gap-6 order-2 max-lg:order-1 py-5">
-                       <FilterDrawer minPrice={minPrice} maxPrice={maxPrice} setMin={setMin} setMax={setMax} fetchProducts={fetchProducts}  />
+                       <FilterDrawer
+                           minPrice={minPrice}
+                           maxPrice={maxPrice}
+                           setMin={setMin}
+                           setMax={setMax}
+                           onApply={handleApplyFilter}
+                           onClear={handleClearFilters}
+                           setProducts={setProducts}
+                       />
                    </aside>
                </div>
            </div>

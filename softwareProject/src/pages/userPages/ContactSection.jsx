@@ -4,23 +4,27 @@ import toast from "react-hot-toast";
 import { backendUrlApi } from "../../store/authStore";
 
 export default function ContactSection() {
-
+  
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+      setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post(`${backendUrlApi}api/v1/contact`, formData);
-      toast.success("Message sent successfully!");
-      setFormData({ name: "", email: "", message: "" });
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to send message.");
-    }
+      e.preventDefault();
+      try {
+          setLoading(true);
+          await axios.post(`${backendUrlApi}api/v1/subscribe`, formData);
+          toast.success("🎉 You are subscribed!");
+          setFormData({ name: "", email: "", message: "" });
+      } catch (err) {
+          console.error(err);
+          toast.error(err.response?.data?.message || "❌ Subscription failed.");
+      } finally {
+          setLoading(false);
+      }
   };
 
     return (
@@ -62,7 +66,7 @@ export default function ContactSection() {
                             <button
                                 type="submit"
                                 className="inline-flex items-center px-5 py-2 rounded-lg bg-amber-400 text-black font-semibold italic shadow hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300">
-                                Send Message
+                                {loading ? "Subscribing..." : "Subscribe"}
                             </button>
                         </form>
                     </div>

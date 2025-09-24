@@ -4,15 +4,8 @@ import { FaArrowDown, FaFilter, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { backendUrlApi } from "../../../store/authStore";
 
-export default function FilterDrawer({
-    minPrice,
-    maxPrice,
-    setMin,
-    setMax,
-    onApply,
-    onClear,
-}) {
-    // console.log(maxPrice , minPrice);
+export default function FilterDrawer({ minPrice, maxPrice, setMin, setMax, onApply, onClear, setProducts }) {
+
     const [open, setOpen] = useState(false);
 
     return (
@@ -39,6 +32,7 @@ export default function FilterDrawer({
                 </button>
 
                 <div className="mt-10">
+                    <SearchBar setProducts={setProducts} />
                     <DropdownCollection />
                     <FilterContent
                         minPrice={minPrice}
@@ -53,6 +47,7 @@ export default function FilterDrawer({
                             onClear();
                             setOpen(false);
                         }}
+                        setProducts
                     />
                 </div>
             </div>
@@ -61,6 +56,9 @@ export default function FilterDrawer({
             <aside
                 className="hidden lg:block bg-[#efefe8] rounded-2xl p-5  mx-auto
                    sticky top-24 h-max shadow-[0_6px_18px_rgba(0,0,0,.08)] w-[300px]">
+                <div className="my-2">
+                    <SearchBar setProducts={setProducts} />
+                </div>
                 <div className="mb-8">
                     <DropdownCollection />
                 </div>
@@ -70,7 +68,7 @@ export default function FilterDrawer({
     );
 }
 
-/*    */
+
 function FilterContent({
     minPrice,
     maxPrice,
@@ -130,6 +128,7 @@ function FilterContent({
   );
 }
 
+// categories
 function DropdownCollection() {
     const [open, setOpen] = useState(false);
     const [categories, setCategories] = useState([]);
@@ -203,4 +202,34 @@ function DropdownCollection() {
     );
 }
 
-export { DropdownCollection };
+// search
+
+function SearchBar({ setProducts }) {
+  const [keyword, setKeyword] = useState("");
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.get(`${backendUrlApi}api/v1/products?keyword=${keyword}`);
+        setProducts(res.data.data); 
+        console.log(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return (
+      <form onSubmit={handleSearch} className="flex gap-2">
+          <input
+              type="text"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              placeholder="Search products..."
+              className="border border-bg-[var(--bg-Color)] p-2 rounded w-full text-[var(--bg-Color)] "
+          />
+          <button type="submit" className="bg-[var(--bg-btn)] hover:opacity-90 px-4 py-2 rounded">
+              Search
+          </button>
+      </form>
+  );
+}
