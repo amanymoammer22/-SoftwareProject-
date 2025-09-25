@@ -16,7 +16,7 @@ router.route("/").get(getProducts).post(
     createProductValidator, 
     createProduct, 
 );
-// router.route("/").get(getProducts).post(createProductValidator, createProduct);
+
 router.route("/:id").get(getProductValidator, getProduct).put(updateProductValidator, updateProduct).delete(deleteProductValidator, deleteProduct);
 
 module.exports = router;

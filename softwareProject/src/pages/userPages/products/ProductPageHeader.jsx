@@ -38,40 +38,6 @@ export default function ProductPageHeader() {
                 </div>
             </div>
 
-            {/* ⬇ Choose collection */}
-            {/* <div className="dropdown relative mt-4 lg:mt-0">
-                <div tabIndex={0} role="button">
-                    <button
-                        className="flex  gap-2 
-                                   bg-[var(--MainColor)] hover:bg-[var(--havericon)] 
-                                   text-white border border-transparent hover:border-[var(--MainColor)]  
-                                   px-5 py-2 rounded-xl shadow-lg transition text-lg sm:text-xl">
-                        <FaArrowDown size={20} />
-                        Choose collection
-                    </button>
-                </div>
-
-                <ul
-                    tabIndex={0}
-                    className="dropdown-content  absolute right-0 mt-2 
-                               menu rounded-lg z-10 w-52 sm:w-60 p-2 
-                               shadow bg-[var(--gb-cart)] text-center">
-                    {categories.length > 0 ? (
-                        categories.map((cat) => (
-                            <li key={cat._id}>
-                                <Link to={`/products/category/${cat.name}`} className="block py-2 hover:text-[var(--MainColor)]">
-                                    {cat.name}
-                                </Link>
-                                <hr />
-                            </li>
-                        ))
-                    ) : (
-                        <li>
-                            <span className="text-gray-400">No categories found</span>
-                        </li>
-                    )}
-                </ul>
-            </div> */}
         </div>
     );
 }

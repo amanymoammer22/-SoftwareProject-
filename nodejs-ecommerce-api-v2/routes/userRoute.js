@@ -14,9 +14,6 @@ const {
     deleteLoggedUserData,
 } = require("../services/userService");
 
-// console.log("typeof getLoggedUserData:", typeof getLoggedUserData);
-// console.log("typeof getUser:", typeof getUser);
-
 const authService = require("../services/authService");
 
 const router = express.Router();

@@ -9,6 +9,7 @@ const createToken = require("../utils/createToken");
 
 const User = require("../models/userModel");
 
+
 // @desc    Signup
 // @route   POST /api/v1/auth/signup
 // @access  Public
@@ -23,9 +24,10 @@ exports.signup = asyncHandler(async (req, res, next) => {
     });
 
     const token = createToken(user._id);
-    user.password = undefined; // لا تُرجع الباسورد
+    user.password = undefined; 
     res.status(201).json({ data: user, token });
 });
+
 
 // @desc    Login
 // @route   POST /api/v1/auth/login
@@ -36,7 +38,6 @@ exports.login = asyncHandler(async (req, res, next) => {
         .trim();
     const password = req.body.password;
 
-    // ابحث عن المستخدم
     const user = await User.findOne({ email });
     if (!user || !(await bcrypt.compare(password, user.password))) {
         return next(new ApiError("Incorrect email or password", 401));
@@ -83,6 +84,8 @@ exports.allowedTo = (...roles) =>
         }
         next();
     });
+
+
 
 // @desc    Forgot password
 // @route   POST /api/v1/auth/forgotPassword
@@ -141,6 +144,8 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     res.status(200).json({ status: "success", message: "Reset code sent to email" });
 });
 
+
+
 // @desc    Verify password reset code
 // @route   POST /api/v1/auth/verifyResetCode
 // @access  Public
@@ -171,6 +176,8 @@ exports.verifyResetCode = asyncHandler(async (req, res, next) => {
     res.status(200).json({ status: "success", message: "Code verified" });
 });
 
+
+
 // @desc    Reset password
 // @route   POST /api/v1/auth/resetPassword
 // @access  Public
@@ -179,7 +186,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
         .toLowerCase()
         .trim();
     const newPassword = req.body.newPassword;
-    const passwordConfirm = req.body.passwordConfirm; // لو سكيمتك تتحقق من التطابق
+    const passwordConfirm = req.body.passwordConfirm; 
 
     const user = await User.findOne({ email });
     if (!user) {
@@ -192,7 +199,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 
     user.password = newPassword;
     if (typeof passwordConfirm !== "undefined") {
-        user.passwordConfirm = passwordConfirm; // في حال السكيمة تتحقق من التطابق
+        user.passwordConfirm = passwordConfirm; 
     }
     user.passwordChangedAt = Date.now();
     user.passwordResetCode = undefined;

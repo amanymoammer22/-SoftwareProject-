@@ -48,7 +48,7 @@ export default function Login() {
   });
 
   return (
-      <main className="min-h-screen bg-[var(--bg-Color)] flex items-center justify-center p-6">
+      <main className="min-h-screen bg-[var(--bg-Color)] flex items-center justify-center p-6 mt-16 md:mt-2">
           <section className="w-full max-w-lg bg-[#66120e] rounded-lg shadow-2xl p-8 sm:p-10 border border-black/10">
               <div className="flex justify-center mb-6">
                   <img src="/logo.jpg" alt="Palestinian Embroidery" className="w-20 h-20 rounded-md ring-1 ring-white/20 object-cover mt-2" />

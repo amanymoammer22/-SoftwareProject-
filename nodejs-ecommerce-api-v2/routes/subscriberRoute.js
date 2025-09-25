@@ -4,6 +4,6 @@ const router = express.Router();
 router
     .route("/")
     .post(createSubscription) // POST /api/v1/subscribe
-    .get(getSubscribers); // GET /api/v1/subscribe (للعرض - اختيارية)
+    .get(getSubscribers); // GET /api/v1/subscribe 
 
 module.exports = router;

@@ -14,7 +14,7 @@ class ApiFeatures {
 
         for (let key in queryStringObj) {
             if (key.includes("[")) {
-                // مثال: price[gte] => { price: { $gte: value } }
+                // ex: price[gte] => { price: { $gte: value } }
                 const [field, operator] = key.split("[");
                 const cleanOperator = operator.replace("]", "");
                 if (!mongoQuery[field]) mongoQuery[field] = {};
@@ -22,7 +22,6 @@ class ApiFeatures {
             } else {
                 let value = queryStringObj[key];
 
-                // 🟢 تحسين: أي مفتاح بينتهي بـ "id" أو اسمه "category" نحوله لـ ObjectId
                 if (key.toLowerCase().endsWith("id") || key === "category") {
                     try {
                         value = new mongoose.Types.ObjectId(value);

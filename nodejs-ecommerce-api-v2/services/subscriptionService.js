@@ -1,6 +1,5 @@
-// controllers/subscriptionController.js
 const Subscription = require("../models/subscriptionModel");
-const sendEmail = require("../utils/sendEmail"); // كود إرسال الإيميل
+const sendEmail = require("../utils/sendEmail"); 
 
 exports.notifySubscribers = async (req, res, next) => {
     try {
@@ -11,7 +10,7 @@ exports.notifySubscribers = async (req, res, next) => {
             return res.status(400).json({ message: "No subscribers found." });
         }
 
-        // إرسال لكل مشترك
+
         await Promise.all(
             subscribers.map((sub) =>
                 sendEmail({

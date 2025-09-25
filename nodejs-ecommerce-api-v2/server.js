@@ -18,8 +18,6 @@ const authRoute = require("./routes/authRoute");
 const productRoute = require("./routes/productRoute");
 const cartRouter = require("./routes/cartRoute");
 const wishlistRoute = require("./routes/wishlistRoute");
-const adminRoute = require("./routes/adminRoute");
-// const contactRoutes = require("./routes/contactRoute");
 const subscriberRoute = require("./routes/subscriberRoute");
 
 
@@ -47,8 +45,6 @@ app.use(
     }),
 );
 
-
-// (اختياري) لو بدك تضمن الـ credentials بالهيدر
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Credentials", "true");
     next();
@@ -62,8 +58,6 @@ app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/products", productRoute);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/wishlist", wishlistRoute);
-app.use("/api/v1/admin", adminRoute);
-// app.use("/api/v1/contact", contactRoutes);
 app.use("/api/v1/subscribe", subscriberRoute);
 
 // 6) 404 handler
@@ -74,7 +68,7 @@ app.use((req, res, next) => {
 app.use(globalError);
 app.use("/Product", express.static("uploads/Product"));
 
-// 8) Start server (مرة واحدة فقط)
+// 8) Start server   
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
     console.log(`App running on http://localhost:${PORT}`);

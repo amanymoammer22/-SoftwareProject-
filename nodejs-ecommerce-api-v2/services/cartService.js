@@ -13,13 +13,12 @@ const calcTotalCartPrice = (cart) => {
     return totalPrice;
 };
 
-
-// مساعد لاختيار صورة آمنة (من المنتج أو بديل)
 const pickImage = (product) =>
   product?.imageCover ||
   (Array.isArray(product?.images) ? product.images[0] : null) ||
   "/images/placeholder.png";
   
+
 // @desc    Add product to  cart
 // @route   POST /api/v1/cart
 // @access  Private/User
@@ -53,7 +52,7 @@ exports.addProductToCart = asyncHandler(async (req, res, next) => {
       const item = cart.cartItems[idx];
       item.quantity += 1;
        item.imageCover = pickImage(product);
-       item.title = product.title; // تأكدنا إن العنوان دائماً محدث
+       item.title = product.title; 
        cart.cartItems[idx] = item;
     } else {
       cart.cartItems.push({
@@ -68,7 +67,6 @@ exports.addProductToCart = asyncHandler(async (req, res, next) => {
   calcTotalCartPrice(cart);
   await cart.save();
 
-  // مهم: رجّع cart مع populate
   const populatedCart = await Cart.findById(cart._id);
 
   res.status(200).json({

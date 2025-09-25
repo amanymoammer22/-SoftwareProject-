@@ -11,7 +11,7 @@ const subscribeSchema = new mongoose.Schema(
             type: String,
             required: [true, "Subscriber email is required"],
             lowercase: true,
-            unique: true, // كل ايميل مرة وحدة
+            unique: true, 
         },
         message: {
             type: String,

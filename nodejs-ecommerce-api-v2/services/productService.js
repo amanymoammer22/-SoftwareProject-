@@ -67,11 +67,6 @@ exports.getProducts = factory.getAll(Product, "Products");
 // @access  Public
 exports.getProduct = factory.getOne(Product);
 
-// @desc    Create product
-// @route   POST  /api/v1/products
-// @access  Private
-// exports.createProduct = factory.createOne(Product);
-
 
 
 // @desc    Create product
