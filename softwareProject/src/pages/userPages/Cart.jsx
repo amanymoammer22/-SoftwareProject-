@@ -84,9 +84,9 @@ export default function Cart() {
     function handleWhatsappOrder() {
         if (!cart || !cart.cartItems) return;
 
-        const phoneNumber = "201040962751"; // ضع رقمك هنا مع كود الدولة
+        const phoneNumber = "201040962751"; 
 
-        // جهز نص الرسالة
+       
         let message = "Hello! I want to place this order:\n\n";
         cart.cartItems.forEach((item) => {
             message += `- ${item.title} x${item.quantity} = $${item.quantity * item.price}\n`;
@@ -94,10 +94,8 @@ export default function Cart() {
         message += `\nTotal: $${cart.totalCartPrice}\n`;
         message += "Please deliver to my address.";
 
-        // إنشاء الرابط
         const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
-        // فتح الرابط
         window.open(url, "_blank");
     }
 

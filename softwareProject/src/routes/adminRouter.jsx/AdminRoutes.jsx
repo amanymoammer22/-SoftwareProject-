@@ -11,7 +11,6 @@ import AdminRoute from './AdminRoute';
 export default function AdminRoutes() {
     return (
         <Routes>
-           
             <Route element={<AdminRoute />}>
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<Dashboard />} />

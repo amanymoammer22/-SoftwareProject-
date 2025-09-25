@@ -10,9 +10,6 @@ import { flushSync } from "react-dom";
 export default function Login() {
     const navigate = useNavigate();
     const login = authStore((state) => state.login);
-    
-    // const login = authStore((state) => state.login);
-    // login(user, token, values.remember);
 
      const handleSubmit = async (values, { setSubmitting }) => {
         const data = { email: values.email, password: values.password };
@@ -58,7 +55,6 @@ export default function Login() {
               </div>
 
               <h3 className="text-center text-sm tracking-wide text-gray-200">Palestinian Embroidery</h3>
-              {/* <h2 className="text-center text-2xl font-semibold text-gray-100 mt-1">Artisan Login</h2> */}
 
               <form onSubmit={formik.handleSubmit} className="mt-8 space-y-5">
                   <div>

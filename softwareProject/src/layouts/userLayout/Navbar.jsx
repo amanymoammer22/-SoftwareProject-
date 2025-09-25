@@ -10,8 +10,8 @@ export default function Navbar() {
     const navigate = useNavigate();
     const { isLoggedIn, logout } = authStore();
         const handleLogout = () => {
-            logout(); // يمسح التخزين + Zustand
-            setMenuOpen(false); // اغلاق المينيو لو مفتوح
+            logout(); 
+            setMenuOpen(false); 
             navigate("/login", { replace: true });
             console.log("logout success");
         };
@@ -35,10 +35,6 @@ export default function Navbar() {
                      </Link>
 
                      <AuthLink isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-
-                     {/* <Link to="/login">
-                         <FaUserCircle size={30} className="transition duration-300 text-[var(--bg-colorA)] hover:text-[var(--bgtext-coler)]" />
-                     </Link> */}
 
                      <Link to="/cart">
                          <FaShoppingBag size={30} className="md:flex hidden transition duration-300 text-[var(--bg-colorA)] hover:text-[var(--bgtext-coler)]" />
